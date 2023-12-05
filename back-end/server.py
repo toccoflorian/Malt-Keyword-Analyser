@@ -5,7 +5,7 @@ import json
 import time
 import shelve
 
-from Class import Fiche, Jour
+from Jour import Fiche, Jour
 import fonctions
 
 
