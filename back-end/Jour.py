@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import json
 
 
 # Jour correspont à un jour de données avec sa date, son set de fiches et son id
@@ -9,10 +10,12 @@ class Jour():
         self.nombre_de_Fiche = nombre_de_Fiche
         self.fiches = set()
 
+
     # ajouter une fiche aux set de fiches
     def add_fiche(self, fiche) -> None:
         self.fiches.add(fiche)
     
+
     # obtenir toutes les fiches sous forme de list
     def get_fiches(self) -> list:
         fiches = list()
@@ -20,6 +23,14 @@ class Jour():
             fiches.append(fiche)
         return fiches
     
+
+    def get_json_serializable(self):
+        fiches = list()
+        for index, fiche in enumerate(self.fiches):
+            fiches.append(fiche.get_fiche_data())
+        return {"date": self.date, "content":{"id": self.id, "fiches": fiches, "bests": self.get_bests_keyword()}}
+    
+
     # calculer les 5 meilleurs mots clé par position, score, nombre d'apparitions 
     def get_bests_keyword(self) -> dict:
         fiches = self.get_fiches()
@@ -58,6 +69,8 @@ class Jour():
         plt.show()
 
 
+
+
 # Fiche correspont à un mot clé avec sa position, son apparition et son score
 class Fiche():
     def __init__(self, keyword, nombre_apparition, position) -> None:
@@ -66,6 +79,7 @@ class Fiche():
         self.position = position
         self.score = self.get_score()
     
+
     # obtenir la fiche sous forme de dict
     def get_fiche_data(self) -> dict:
         return {"keyword": self.keyword,
@@ -73,10 +87,12 @@ class Fiche():
                 "position": self.position,
                 "score": self.score}
     
+
     # obtenir le score de la fiche selon position et appariton
     def get_score(self) -> float:
         return round((1 / int(self.position)) * int(self.nombre_apparition) * 10, 3)
     
+
     # montrer un graphique apparition / position
     def show_ratio_graphique(self) -> None:
         plt.plot([0, self.nombre_apparition], [0, self.position])
