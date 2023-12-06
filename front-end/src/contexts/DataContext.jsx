@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from "react"
 export const DataContext = createContext()
 
 
-
 export function DataProvider({ children = null }) {
     const [data, setData] = useState(null)
 

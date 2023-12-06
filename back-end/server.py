@@ -15,7 +15,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-
 # recevoir nodes extrait par JS depuis le HTML, les convertir et enregistrer les données dans la base de données
 @app.route("/js_to_py/", methods=["POST"]) 
 def receive_data():
@@ -29,7 +28,6 @@ def receive_data():
         print(json.dumps(e.with_traceback))
         return json.dumps("erreur lors de l'envoie des données au serveur ou de l'enregistrement sur la base de données")
     
-
 
 # envoyer les jours à react
 @app.route("/get_jours/", methods=["GET"])
@@ -46,7 +44,6 @@ def send_jours_to_react():
         return json.dumps("erreur lors de la demande de données")
 
 
-
 # recevoir l'ordre d'afficher les graphiques
 @app.route("/show_grahique/", methods=["POST", "GET"])
 def show_graphique():
@@ -60,7 +57,6 @@ def show_graphique():
     except Exception as e:
         print(json.dumps(e.with_traceback))
         return json.dumps("erreur lors de l'affichage des graphiques")
-
 
 
 if __name__ == '__main__':

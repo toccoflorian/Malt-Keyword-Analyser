@@ -1,10 +1,12 @@
 
 
 import './App.scss'
-import Content from './components/Content/Content'
+import Routes from './Routes'
 import Header from './components/Header/Header'
 
+
 import { DataProvider } from './contexts/DataContext'
+
 
 
 function App() {
@@ -14,7 +16,7 @@ function App() {
     <>
       <DataProvider >
         <Header />
-        <Content />
+        <Routes />
       </DataProvider>
 
     </>
