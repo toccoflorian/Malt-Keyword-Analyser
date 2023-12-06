@@ -26,8 +26,7 @@ dist-ssr
 # Exclusions manuelle
 node_modules/
 __pycache__/
-jours/
-data2/
+back-end/HTML_to_scrap/
 .env
 data.html
 data2.html
