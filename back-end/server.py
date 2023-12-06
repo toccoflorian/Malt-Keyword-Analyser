@@ -2,11 +2,10 @@
 from flask import Flask, request
 from flask_cors import CORS
 import json
-import time
-import shelve
 
-from Jour import Fiche, Jour
 import fonctions
+from Jour import Fiche, Jour
+from database.Database import Jours_table
 
 
 # convertir les bytes de data en dict
@@ -16,21 +15,11 @@ def convert_data_to_dict(data):
 
 # convertir les dict de data en objets
 def create_object(data):
-    jour = Jour(int(time.time()), len(data)) #int(time.time())
+    jour = Jour(fonctions.get_str_time(), len(data)) #int(time.time())
     for i in data:
         if data[i]["keyWord"] != "florian tocco":
             jour.add_fiche(Fiche(data[i]["keyWord"], data[i]["nombre"], data[i]["position"]))
     return jour
-
-# sauvegarder les objets py avec shelve
-def save_on_shelve(jour):
-    filename = jour.date
-    db = shelve.open("back-end/jours/")
-    for name in db:
-        if name == filename:
-            if input(f"Voulez vous écrasser {name}? (0 pour oui, autres pour non") != "0":
-                break
-    db[filename] = jour
 
 # transformer la liste d'objets en format serialisable json
 def object_to_jsonifiable():
@@ -42,6 +31,17 @@ def object_to_jsonifiable():
             jour_list.append(fiche.get_fiche_data())
         jours_jsonifiable[jour.date] = {"id": jour.id, "fiches": jour_list, "bests": jour.get_bests_keyword()}
     return jours_jsonifiable
+
+# sauvegarder les objets py avec shelve
+def save_on_database(jour):
+    try:
+        jours_table = Jours_table()
+        jours_table.save_jour(jour)
+
+    except Exception as e:
+        print(e)
+
+
     
 
 #   #   Flask routes    #   #
@@ -49,15 +49,13 @@ def object_to_jsonifiable():
 app = Flask(__name__)
 CORS(app)
 
-
 # recevoir nodes extrait par JS depuis le HTML
 @app.route("/js_to_py/", methods=["POST"]) 
 def receive_data():
     try:
-        formated_data = create_object(
-                convert_data_to_dict(
-                request.get_data()))
-        save_on_shelve(formated_data)
+        data_dict = convert_data_to_dict(request.get_data())
+        jours = fonctions.create_object(data_dict)
+        save_on_database(jours)
         return "OK"
     
     except Exception as e:
@@ -75,8 +73,6 @@ def send_jours_to_react():
 # recevoir l'ordre d'afficher les graphiques
 @app.route("/show_grahique/", methods=["POST", "GET"])
 def show_graphique():
-    
-    
     try:
         requete = request.get_json()
         jour_id, choix_valeur_a_afficher = requete

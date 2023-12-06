@@ -1,11 +1,11 @@
-import datetime
 import matplotlib.pyplot as plt
+
 
 # Jour correspont à un jour de données avec sa date, son set de fiches et son id
 class Jour():
-    def __init__(self, date, nombre_de_Fiche):
-        self.id = date
-        self.date = datetime.datetime.fromtimestamp(date).strftime("%d-%m-%Y")
+    def __init__(self, date, nombre_de_Fiche, id=None):
+        self.id = id
+        self.date = date
         self.nombre_de_Fiche = nombre_de_Fiche
         self.fiches = set()
 

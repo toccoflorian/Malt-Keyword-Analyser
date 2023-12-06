@@ -1,11 +1,9 @@
 
 
 import fonctions
+import database.Database as DB
+jour_table = db.Jours_table()
+jours = jour_table.get_jours()
 
-
-jours = fonctions.get_jours()[-1]
-
-# print(jours)
-for i in jours.calcul_bests_keyword():
-    print(i)
-
+for i in jours:
+    print(i.get_fiches())
