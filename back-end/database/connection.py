@@ -14,7 +14,7 @@ def connect_DB(host, db_name, user_name, password):
     try:
         return connector.connect(**config)
     except connector.Error as e:
-        print(e)
+        print(e.args)
 
 # callback pour déclencher la connexion à la base de données
 def connection_callback(): 

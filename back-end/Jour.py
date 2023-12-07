@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt
-import json
+
+
 
 
 # Jour correspont à un jour de données avec sa date, son set de fiches et son id
@@ -49,6 +49,7 @@ class Jour():
     
     # afficher un graphique du jour, choix possible: "position", "nombre_apparition", "score"
     def show_dayly_graphique(self, key="position", reverse=False) -> None:
+        import matplotlib.pyplot as plt
         if key != "score":
             reverse = True if key == "position" else False
         values = list()
@@ -95,6 +96,7 @@ class Fiche():
 
     # montrer un graphique apparition / position
     def show_ratio_graphique(self) -> None:
+        import matplotlib.pyplot as plt
         plt.plot([0, self.nombre_apparition], [0, self.position])
         plt.ylabel("Nombre d'apparitions")
         plt.xlabel("Psition")

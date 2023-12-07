@@ -27,7 +27,9 @@ dist-ssr
 node_modules/
 __pycache__/
 back-end/HTML_to_scrap/
+malt_API/
 .env
 data.html
 data2.html
 data3.html
+test.py

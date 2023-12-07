@@ -1,7 +1,7 @@
-import database.connection as connection_clbk
-import json
 
-from Jour import Jour, Fiche
+
+
+
 
 class Database():
     def __init__(self) -> None:
@@ -10,13 +10,14 @@ class Database():
 
     # établir la connexion à la base de données
     def open_connection(self) -> None:
+        import database.connection as connection_clbk
         try:
             self.__connection = connection_clbk.connection_callback()
             self.__cursor = self.__connection.cursor()
             return self.__connection, self.__cursor
     
         except Exception as e:
-            print(e)
+            print(e.args)
 
     # fermer la connexion à la base de données
     def close_connection(self):
@@ -57,16 +58,24 @@ class Jours_table(Database):
 
     # enregistrer un jour de données sur la base de données
     def save_jour(self, jour):
-        print("start")
-        fiches = list()
-        for word in jour.get_fiches():
-            fiches.append({'keyword': word.keyword, 'apparitions': word.nombre_apparition, 'position': word.position})
-        result = self.execute_SQL_request("INSERT INTO " + self.DB_TABLE + " (`date`, `fiches`)  VALUES (%s, %s)", (jour.date, json.dumps(fiches)), True)
-        print("stop", result)
+        import json
+        from data_traitment import data_traitement_functions
+        try:
+            print("save start")
+            jour = data_traitement_functions.create_object(jour)
+            fiches = list()
+            for word in jour.get_fiches():
+                fiches.append({'keyword': word.keyword, 'apparitions': word.nombre_apparition, 'position': word.position})
+            self.execute_SQL_request("INSERT INTO " + self.DB_TABLE + " (`date`, `fiches`)  VALUES (%s, %s)", (jour.date, json.dumps(fiches)), True)
+            print("save successfull")
+        except Exception as e:
+            print(e.args)
 
     
     # obtenir les objets Jour
     def get_jours(self):
+        import json
+        from Jour import Jour, Fiche
         try:
             jours = []
             connection, cursor = self.open_connection()
@@ -84,7 +93,7 @@ class Jours_table(Database):
             return jours
 
         except Exception as e:
-            print(e)
+            print(e.args)
             
 
     # créer une table jours sur la base de données
